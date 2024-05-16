@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=EB+Garamond:wght@600&family=Krub:wght@400;600&family=Open+Sans&display=swap"
+        rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Krub:wght@400;600&family=Open+Sans&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-color: #080710;
+        }
+
+        .background {
+            width: 430px;
+            height: 480px;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: 50%;
+        }
+
+        .background .shape {
+            height: 180px;
+            width: 180px;
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .shape:first-child {
+            background: linear-gradient(#1845ad, #23a2f6);
+            left: -50px;
+            top: -80px;
+        }
+
+        .shape:last-child {
+            background: linear-gradient(to right, #ff512f, #f09819);
+            right: -30px;
+            bottom: -80px;
+        }
+
+        .calculator {
+            width: 296px;
+            margin: 63px auto;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.13);
+            backdrop-filter: blur(10px);
+            /*para que de fondo se ven las esferas*/
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+            /*tenga sombra al rededor de la caja*/
+        }
+
+        h1 {
+            margin: 0px;
+            margin-bottom: 10px;
+            font-family: 'Caveat', cursive;
+            font-size: 66px;
+            color: yellow;
+        }
+
+        input {
+            margin-bottom: 20px;
+            width: 240px;
+            height: 28px;
+            font-size: 29px;
+            font-family: 'Krub', sans-serif;
+            font-weight: bold;
+        }
+
+        button {
+            margin: 2px;
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            font-family: 'Krub', sans-serif;
+            font-weight: bold;
+            font-size: 14px;
+            background-color: white;
+        }
+
+        button:hover {
+            background-color: #f09819;
+            cursor: pointer;
+        }
+        .res{
+            color: white;
+            font-family: 'Krub', sans-serif;
+            font-weight: bold;
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    <div class="calculator">
+        <h1>Calculadora</h1>
+        <input type="text" id="num1" placeholder="Número 1">
+        <input type="text" id="num2" placeholder="Número 2">
+        <div id="resultado" class="res"></div>
+        <button onclick="realizarOperacion('sumar')">+</button>
+        <button onclick="realizarOperacion('restar')">-</button>
+        <button onclick="realizarOperacion('factorial')">!</button>
+        <button onclick="realizarOperacion('multiplicacion')">&times;</button>
+        <button onclick="realizarOperacion('division')">&div;</button>
+        <button onclick="realizarOperacion('potencia')">^</button>
+        <button onclick="realizarOperacion('modulo')">%</button>
+        <button onclick="realizarOperacion('raizCuadrada')">&radic;</button>
+        <button onclick="realizarOperacion('logaritmo')">log()</button>
+        <button onclick="realizarOperacion('sin')">sin()</button>
+        <button onclick="realizarOperacion('cos')">cos()</button>
+        <button onclick="realizarOperacion('tan')">tan()</button>
+        <button onclick="realizarOperacion('e')">e^()</button>
+        <button onclick="realizarOperacion('sinh')">sinh()</button>
+        <button onclick="realizarOperacion('cosh')">cosh()</button>
+        <button onclick="realizarOperacion('tanh')">tanh()</button>
+    </div>
+    <div id="resultado"></div>
+
+    <script>
+        async function realizarOperacion(operacion) {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+
+            try {
+                const response = await fetch(`http://localhost:3000/${operacion}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ num1, num2 })
+                });
+                const data = await response.json();
+                document.getElementById('resultado').innerText = `Resultado: ${data.resultado}`;
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+    </script>
+</body>
+
+</html>
+
+
+
+<!--
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+</head>
+<body>
+    <h1>Calculadora</h1>
+    <div>
+        <input type="text" id="num1" placeholder="Número 1">
+        <input type="text" id="num2" placeholder="Número 2">
+        <button onclick="realizarOperacion('sumar')">Sumar</button>
+        <button onclick="realizarOperacion('restar')">Restar</button>
+    </div>
+    <div id="resultado"></div>
+
+    <script>
+        async function realizarOperacion(operacion) {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+
+            try {
+                const response = await fetch(`http://localhost:3000/${operacion}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ num1, num2 })
+                });
+                const data = await response.json();
+                document.getElementById('resultado').innerText = `Resultado: ${data.resultado}`;
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+    </script>
+</body>
+</html>
+-->
